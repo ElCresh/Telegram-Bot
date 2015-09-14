@@ -21,7 +21,7 @@ Versione Python *Supportato?*
 ====================
 _`Requisiti`
 ====================
-- `python-telegram-bot`_ (pip install python-telegram-bot)
+- python-telegram-bot (pip install python-telegram-bot)
 
 ====================
 _`Ottieni il codice`
