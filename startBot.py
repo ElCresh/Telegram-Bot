@@ -24,6 +24,19 @@
 import telegram
 import sys
 
+TELEGRAM_BOT_NAME = ""
+TELEGRAM_BOT_ID = ""
+TELEGRAM_BOT_USERNAME = ""
+
+def getBotInfo(bot):
+    global TELEGRAM_BOT_NAME
+    global TELEGRAM_BOT_ID
+    global TELEGRAM_BOT_USERNAME
+
+    TELEGRAM_BOT_USERNAME = bot.getMe()['username']
+    TELEGRAM_BOT_ID = str(bot.getMe()['id'])
+    TELEGRAM_BOT_NAME = bot.getMe()['first_name']
+
 def readtoken(path):
     with open(path, "r") as config:
         token = config.read()
@@ -50,20 +63,24 @@ def main():
     else:
         path = sys.argv[1]
 
+    #Ottengo il token per la creazione dell'istanza del bot
     TELEGRAM_BOT_TOKEN = readtoken(path)
+
+    #Creazione dell'istanza del bot
+    bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+
+    #Ottengo informazioni del bot
+    getBotInfo(bot)
 
     print ("Avvio bot in corso...")
     print ("Verifica autenticazione..")
 
-    bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
-
-    #Determino il nome del bot tramite Telegram
-    TELEGRAM_BOT_NAME = bot.getMe()['first_name']
-
-    #Stampa identita del bot
+    #Stampa identita' del bot
     print ("")
-    print ("Identita' bot: ")
-    print (bot.getMe())
+    print ("= Identita' bot =")
+    print ("ID: " +TELEGRAM_BOT_ID)
+    print ("Nome: " +TELEGRAM_BOT_NAME)
+    print ("Username: " +TELEGRAM_BOT_USERNAME)
     print ("")
 
     #Stampa messaggi ricevuti mentre il bot non era in esecuzione
@@ -89,6 +106,9 @@ def main():
 
             if (text):
                 print ("[MSG] "+text)
+
+                #Aggiono informazioni bot
+                getBotInfo(bot)
 
                 bot.sendMessage(chat_id=chat_id, text=reply(text, TELEGRAM_BOT_NAME, bot, chat_id))
                 LAST_UPDATE_ID = update_id + 1
