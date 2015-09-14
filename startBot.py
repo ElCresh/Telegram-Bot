@@ -29,6 +29,8 @@ with open(path, "r") as config:
 if TELEGRAM_BOT_TOKEN[-1] == "\n":
     TELEGRAM_BOT_TOKEN = TELEGRAM_BOT_TOKEN[:-1]
 
+TELEGRAM_BOT_NAME="Test Bot"
+
 print ("Avvio bot in corso...")
 print ("Verifica autenticazione..")
 
@@ -61,16 +63,16 @@ while True:
 		chat_id = update.message.chat.id
 		update_id = update.update_id
 		
-		if text:
+		if (text):
 			print ("[MSG] "+text)
 			
-			if text == "Come ti chiami?":
+			if (text == "Come ti chiami?"):
 				reply="Di certo non Siri.... Ti pare?!?!?"
-			elif text == "Ti andrebbe un po' di schweppes solo io e te?":
+			elif (text == "Ti andrebbe un po' di schweppes solo io e te?"):
 				reply="No.... Ehi che ti aspettavi?"
 				bot.sendPhoto(chat_id=chat_id, photo='http://652af66dabe8673856dc500efee6dfde.s3.amazonaws.com/wp-content/uploads/2011/06/Uma_Thurman_Schweppes_2011-5.jpeg')
-			elif text == "/start":
-				reply="Benvenuto nel fighissimo bot di Cresh"
+			elif (text == "/start"):
+				reply="Ciao. Io sono "+TELEGRAM_BOT_NAME+". Piacere di conoscerti!"
 			else:
 				reply="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
 			bot.sendMessage(chat_id=chat_id, text=reply)
