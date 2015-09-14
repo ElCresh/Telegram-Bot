@@ -53,7 +53,8 @@ def reply(text, bot_name, bot, chat_id):
     elif (text == "Bravo" or text == "bravo" or text == "ottimo"):
         reply="Grazie"
     elif (text == "Mi canti una canzone?"):
-        bot.sendVoice(chat_id=chat_id, voice=open('audio/song.ogg', 'rb'))
+        with open('audio/song.ogg', 'rb') as audio:
+            bot.sendVoice(chat_id=chat_id, voice=audio)
         reply="Come sono stato?"
     elif (text == "Ti andrebbe un po' di schweppes solo io e te?"):
         bot.sendPhoto(chat_id=chat_id, photo='http://652af66dabe8673856dc500efee6dfde.s3.amazonaws.com/wp-content/uploads/2011/06/Uma_Thurman_Schweppes_2011-5.jpeg')
