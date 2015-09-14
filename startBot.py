@@ -20,25 +20,25 @@ TELEGRAM_BOT_TOKEN=""
 
 import telegram
 
-print "Avvio bot in corso..."
-print "Verifica autenticazione.."
+print ("Avvio bot in corso...")
+print ("Verifica autenticazione..")
 
 bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
 
 #Stampa identita del bot
-print ""
-print "Identita' bot: "
-print bot.getMe()
-print ""
+print ("")
+print ("Identita' bot: ")
+print (bot.getMe())
+print ("")
 
 #Stampa messaggi ricevuti mentre il bot non era in esecuzione
-print "Messaggi ricevuti: "
+print ("Messaggi ricevuti: ")
 updates = bot.getUpdates()
-print [u.message.text for u in updates]
-print ""
+print ([u.message.text for u in updates])
+print ("")
 
-print "Bot avviato!"
-print ""
+print ("Bot avviato!")
+print ("")
 
 try:
 	LAST_UPDATE_ID = bot.getUpdates()[-1].update_id
@@ -53,7 +53,7 @@ while True:
 		update_id = update.update_id
 		
 		if text:
-			print "[MSG] "+text
+			print ("[MSG] "+text)
 			
 			if text == "Come ti chiami?":
 				reply="Di certo non Siri.... Ti pare?!?!?"
