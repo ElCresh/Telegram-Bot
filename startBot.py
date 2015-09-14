@@ -34,7 +34,7 @@ def readtoken(path):
         token = token[:-1]
     return token
 
-def reply(text, bot_name, bot):
+def reply(text, bot_name, bot, chat_id):
     if (text == "Come ti chiami?"):
         reply="Di certo non Siri.... Ti pare?!?!?"
     elif (text == "Ti andrebbe un po' di schweppes solo io e te?"):
@@ -89,7 +89,7 @@ def main():
             if (text):
                 print ("[MSG] "+text)
 
-                bot.sendMessage(chat_id=chat_id, text=reply(text, TELEGRAM_BOT_NAME, bot))
+                bot.sendMessage(chat_id=chat_id, text=reply(text, TELEGRAM_BOT_NAME, bot, chat_id))
                 LAST_UPDATE_ID = update_id + 1
 
 if __name__ == '__main__':
