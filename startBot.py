@@ -1,7 +1,12 @@
 #!/usr/bin/env python
 #
-# Telegram Bot r0
-# Copyright (C) 2015 Andrea Crescentini <cresh.it@gmail.com>
+# Telegram Bot r0.1
+#
+# Copyright (C) 2015
+#
+# Authors:
+# Andrea Crescentini <cresh.it@gmail.com>
+# Andrea Bartolucci <andbartol>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
