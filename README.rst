@@ -26,7 +26,7 @@ _`Ottieni il codice`
 
 Il codice lo trovate a https://github.com/CreshZmine/Telegram-Bot/
 
-Per pottenere il codice::
+Per ottenere il codice::
 
     $ git clone https://github.com/CreshZmine/Telegram-Bot/
     $ cd Telegram-Bot
