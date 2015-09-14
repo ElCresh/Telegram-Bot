@@ -15,10 +15,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see [http://www.gnu.org/licenses/].
-
-TELEGRAM_BOT_TOKEN=""
-
 import telegram
+import sys
+
+if len(sys.argv) == 1:
+    path = "config"
+else:
+    path = sys.argv[1]
+
+with open(path, "r") as config:
+    TELEGRAM_BOT_TOKEN = config.read()
+
+if TELEGRAM_BOT_TOKEN[-1] == "\n":
+    TELEGRAM_BOT_TOKEN = TELEGRAM_BOT_TOKEN[:-1]
 
 print ("Avvio bot in corso...")
 print ("Verifica autenticazione..")
