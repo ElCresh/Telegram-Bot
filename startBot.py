@@ -24,62 +24,72 @@
 import telegram
 import sys
 
-if len(sys.argv) == 1:
-    path = "config"
-else:
-    path = sys.argv[1]
+def readtoken(path):
+    with open(path, "r") as config:
+        token = config.read()
 
-with open(path, "r") as config:
-    TELEGRAM_BOT_TOKEN = config.read()
+    if token[-1] == "\n":
+        token = token[:-1]
+    return token
 
-if TELEGRAM_BOT_TOKEN[-1] == "\n":
-    TELEGRAM_BOT_TOKEN = TELEGRAM_BOT_TOKEN[:-1]
+def reply(text):
+    if (text == "Come ti chiami?"):
+        reply="Di certo non Siri.... Ti pare?!?!?"
+    elif (text == "Ti andrebbe un po' di schweppes solo io e te?"):
+        reply="No.... Ehi che ti aspettavi?"
+        bot.sendPhoto(chat_id=chat_id, photo='http://652af66dabe8673856dc500efee6dfde.s3.amazonaws.com/wp-content/uploads/2011/06/Uma_Thurman_Schweppes_2011-5.jpeg')
+    elif (text == "/start"):
+        reply="Ciao. Io sono "+TELEGRAM_BOT_NAME+". Piacere di conoscerti!"
+    else:
+        reply="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
+    return reply
 
-TELEGRAM_BOT_NAME="Test Bot"
+def main():
+    if len(sys.argv) == 1:
+        path = "config"
+    else:
+        path = sys.argv[1]
 
-print ("Avvio bot in corso...")
-print ("Verifica autenticazione..")
+    TELEGRAM_BOT_TOKEN = readtoken(path)
+    TELEGRAM_BOT_NAME="Test Bot"
 
-bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+    print ("Avvio bot in corso...")
+    print ("Verifica autenticazione..")
 
-#Stampa identita del bot
-print ("")
-print ("Identita' bot: ")
-print (bot.getMe())
-print ("")
+    bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
 
-#Stampa messaggi ricevuti mentre il bot non era in esecuzione
-print ("Messaggi ricevuti: ")
-updates = bot.getUpdates()
-print ([u.message.text for u in updates])
-print ("")
+    #Stampa identita del bot
+    print ("")
+    print ("Identita' bot: ")
+    print (bot.getMe())
+    print ("")
 
-print ("Bot avviato!")
-print ("")
+    #Stampa messaggi ricevuti mentre il bot non era in esecuzione
+    print ("Messaggi ricevuti: ")
+    updates = bot.getUpdates()
+    print ([u.message.text for u in updates])
+    print ("")
 
-try:
-	LAST_UPDATE_ID = bot.getUpdates()[-1].update_id
-except IndexError:
-	LAST_UPDATE_ID = None
+    print ("Bot avviato!")
+    print ("")
 
-#Inizio routine del bot
-while True:
-	for update in bot.getUpdates(offset=LAST_UPDATE_ID, timeout=10):
-		text = update.message.text
-		chat_id = update.message.chat.id
-		update_id = update.update_id
-		
-		if (text):
-			print ("[MSG] "+text)
-			
-			if (text == "Come ti chiami?"):
-				reply="Di certo non Siri.... Ti pare?!?!?"
-			elif (text == "Ti andrebbe un po' di schweppes solo io e te?"):
-				reply="No.... Ehi che ti aspettavi?"
-				bot.sendPhoto(chat_id=chat_id, photo='http://652af66dabe8673856dc500efee6dfde.s3.amazonaws.com/wp-content/uploads/2011/06/Uma_Thurman_Schweppes_2011-5.jpeg')
-			elif (text == "/start"):
-				reply="Ciao. Io sono "+TELEGRAM_BOT_NAME+". Piacere di conoscerti!"
-			else:
-				reply="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
-			bot.sendMessage(chat_id=chat_id, text=reply)
-			LAST_UPDATE_ID = update_id + 1
+    try:
+        LAST_UPDATE_ID = bot.getUpdates()[-1].update_id
+    except IndexError:
+        LAST_UPDATE_ID = None
+
+    #Inizio routine del bot
+    while True:
+        for update in bot.getUpdates(offset=LAST_UPDATE_ID, timeout=10):
+            text = update.message.text
+            chat_id = update.message.chat.id
+            update_id = update.update_id
+
+            if (text):
+                print ("[MSG] "+text)
+
+                bot.sendMessage(chat_id=chat_id, text=reply(text))
+                LAST_UPDATE_ID = update_id + 1
+
+if __name__ == '__main__':
+    main()
