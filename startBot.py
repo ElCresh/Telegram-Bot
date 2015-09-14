@@ -24,6 +24,8 @@
 import telegram
 import sys
 
+TELEGRAM_BOT_NAME="Test Bot"
+
 def readtoken(path):
     with open(path, "r") as config:
         token = config.read()
@@ -51,7 +53,6 @@ def main():
         path = sys.argv[1]
 
     TELEGRAM_BOT_TOKEN = readtoken(path)
-    TELEGRAM_BOT_NAME="Test Bot"
 
     print ("Avvio bot in corso...")
     print ("Verifica autenticazione..")

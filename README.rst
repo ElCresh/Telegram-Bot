@@ -16,8 +16,6 @@ Python Version *Supported?*
 2.7            Not tested
 3.3            Not tested
 3.4            Yes
-PyPy           Not tested
-PyPy3          Not tested
 ============== ============
 
 ====================
