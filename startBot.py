@@ -24,8 +24,6 @@
 import telegram
 import sys
 
-TELEGRAM_BOT_NAME="Test Bot"
-
 def readtoken(path):
     with open(path, "r") as config:
         token = config.read()
@@ -58,6 +56,9 @@ def main():
     print ("Verifica autenticazione..")
 
     bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+
+    #Determino il nome del bot tramite Telegram
+    TELEGRAM_BOT_NAME = bot.getMe()['first_name']
 
     #Stampa identita del bot
     print ("")
