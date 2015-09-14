@@ -19,21 +19,33 @@
 TELEGRAM_BOT_TOKEN=""
 
 import telegram
-bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
 
 print "Avvio bot in corso..."
 print "Verifica autenticazione.."
-print bot.getMe()
 
+bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
+
+#Stampa identita del bot
+print ""
+print "Identita' bot: "
+print bot.getMe()
+print ""
+
+#Stampa messaggi ricevuti mentre il bot non era in esecuzione
 print "Messaggi ricevuti: "
 updates = bot.getUpdates()
 print [u.message.text for u in updates]
+print ""
+
+print "Bot avviato!"
+print ""
 
 try:
 	LAST_UPDATE_ID = bot.getUpdates()[-1].update_id
 except IndexError:
 	LAST_UPDATE_ID = None
 
+#Inizio routine del bot
 while True:
 	for update in bot.getUpdates(offset=LAST_UPDATE_ID, timeout=10):
 		text = update.message.text
