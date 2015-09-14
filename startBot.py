@@ -24,9 +24,11 @@
 import telegram
 import sys
 
+###### BOT INFO VARIABLE ######
 TELEGRAM_BOT_NAME = ""
 TELEGRAM_BOT_ID = ""
 TELEGRAM_BOT_USERNAME = ""
+###############################
 
 def getBotInfo(bot):
     global TELEGRAM_BOT_NAME
@@ -48,9 +50,14 @@ def readtoken(path):
 def reply(text, bot_name, bot, chat_id):
     if (text == "Come ti chiami?"):
         reply="Di certo non Siri.... Ti pare?!?!?"
+    elif (text == "Bravo" or text == "bravo" or text == "ottimo"):
+        reply="Grazie"
+    elif (text == "Mi canti una canzone?"):
+        bot.sendVoice(chat_id=chat_id, voice=open('audio/song.ogg', 'rb'))
+        reply="Come sono stato?"
     elif (text == "Ti andrebbe un po' di schweppes solo io e te?"):
-        reply="No.... Ehi che ti aspettavi?"
         bot.sendPhoto(chat_id=chat_id, photo='http://652af66dabe8673856dc500efee6dfde.s3.amazonaws.com/wp-content/uploads/2011/06/Uma_Thurman_Schweppes_2011-5.jpeg')
+        reply="No.... Ehi che ti aspettavi?"
     elif (text == "/start"):
         reply="Ciao. Io sono "+bot_name+". Piacere di conoscerti!"
     else:
