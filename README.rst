@@ -3,20 +3,25 @@
 _`Introduzione`
 ===============
 
-Bot basato sulle `Telegram Bot API <https://core.telegram.org/bots/api>`_. 
+Bot basato sulle `Telegram Bot API <https://core.telegram.org/bots/api>`_.
 
 -------------------------
-_`Python Version support`
+_`Versioni di Python supportate`
 -------------------------
 
-============== ============
-Python Version *Supported?*
-============== ============
-2.6            Not tested
-2.7            Not tested
-3.3            Not tested
-3.4            Yes
-============== ============
+=============== =============
+Versione Python *Supportato?*
+=============== =============
+2.6             Not tested
+2.7             Not tested
+3.3             Not tested
+3.4             Yes
+=============== =============
+
+====================
+_`Requisiti`
+====================
+- `python-telegram-bot`_ (pip install python-telegram-bot)
 
 ====================
 _`Ottieni il codice`
