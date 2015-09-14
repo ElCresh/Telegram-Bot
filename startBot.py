@@ -34,14 +34,14 @@ def readtoken(path):
         token = token[:-1]
     return token
 
-def reply(text):
+def reply(text, bot_name):
     if (text == "Come ti chiami?"):
         reply="Di certo non Siri.... Ti pare?!?!?"
     elif (text == "Ti andrebbe un po' di schweppes solo io e te?"):
         reply="No.... Ehi che ti aspettavi?"
         bot.sendPhoto(chat_id=chat_id, photo='http://652af66dabe8673856dc500efee6dfde.s3.amazonaws.com/wp-content/uploads/2011/06/Uma_Thurman_Schweppes_2011-5.jpeg')
     elif (text == "/start"):
-        reply="Ciao. Io sono "+TELEGRAM_BOT_NAME+". Piacere di conoscerti!"
+        reply="Ciao. Io sono "+bot_name+". Piacere di conoscerti!"
     else:
         reply="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
     return reply
@@ -89,7 +89,7 @@ def main():
             if (text):
                 print ("[MSG] "+text)
 
-                bot.sendMessage(chat_id=chat_id, text=reply(text))
+                bot.sendMessage(chat_id=chat_id, text=reply(text, TELEGRAM_BOT_NAME))
                 LAST_UPDATE_ID = update_id + 1
 
 if __name__ == '__main__':
