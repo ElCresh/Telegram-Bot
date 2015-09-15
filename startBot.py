@@ -66,8 +66,8 @@ def reply(text, bot_name, bot, chat_id):
 
     #Esplorazione del database alla ricerca della risposta
     for row in cur.fetchall() :
-        if (text == row[0]):
-            reply=row[1]
+        if (text == row[1]):
+            reply=row[2]
             break
         else:
             reply="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
