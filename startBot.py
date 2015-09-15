@@ -57,32 +57,22 @@ def readtoken(path):
     return token
 
 def reply(text, bot_name, bot, chat_id):
-    if (text == "Come ti chiami?"):
-        reply="Di certo non Siri.... Ti pare?!?!?"
-    elif (text == "Bravo" or text == "bravo" or text == "ottimo"):
-        reply="Grazie"
-    elif (text == "Mi canti una canzone?"):
-        with open('audio/song.ogg', 'rb') as audio:
-            bot.sendVoice(chat_id=chat_id, voice=audio)
-        reply="Come sono stato?"
-    elif (text == "Ti andrebbe un po' di schweppes solo io e te?"):
-        bot.sendPhoto(chat_id=chat_id, photo='http://652af66dabe8673856dc500efee6dfde.s3.amazonaws.com/wp-content/uploads/2011/06/Uma_Thurman_Schweppes_2011-5.jpeg')
-        reply="No.... Ehi che ti aspettavi?"
-    elif (text == "/start"):
-        reply="Ciao. Io sono "+bot_name+". Piacere di conoscerti!"
-    else:
-        reply="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
-    return reply
-
-def dbConnection():
     db = MySQLdb.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASS, db=MYSQL_DB)
 
     cur = db.cursor()
-
     cur.execute("SELECT * FROM "+MYSQL_REPLY_TABLE)
 
     for row in cur.fetchall() :
-        print row[0]
+        if (text == row[0]):
+            reply=row[1]
+            break
+        else:
+            reply="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
+    
+    return reply
+
+def dbConnection():
+
 
 def main():
     dbConnection()
