@@ -21,8 +21,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see [http://www.gnu.org/licenses/].
 
+import MySQLdb
 import telegram
 import sys
+
+## DATABASE CONNECTION INFO ##
+MYSQL_HOST = "localhost"
+MYSQL_USER = "root"
+MYSQL_PASS = "root"
+MYSQL_DB = "telegram_bot"
+MYSQL_REPLY_TABLE = "reply"
+##############################
 
 ###### BOT INFO VARIABLE ######
 TELEGRAM_BOT_NAME = ""
@@ -65,7 +74,19 @@ def reply(text, bot_name, bot, chat_id):
         reply="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
     return reply
 
+def dbConnection():
+    db = MySQLdb.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASS, db=MYSQL_DB)
+
+    cur = db.cursor()
+
+    cur.execute("SELECT * FROM "+MYSQL_REPLY_TABLE)
+
+    for row in cur.fetchall() :
+        print row[0]
+
 def main():
+    dbConnection()
+
     if len(sys.argv) == 1:
         path = "config"
     else:
