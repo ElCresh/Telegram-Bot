@@ -57,20 +57,23 @@ def readtoken(path):
     return token
 
 def reply(text, bot_name, bot, chat_id):
-    #Connessione al database
-    db = MySQLdb.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASS, db=MYSQL_DB)
+    if(text == "/start"):
+        reply="Ciao. Io sono "+TELEGRAM_BOT_NAME+". Piacere di conoscerti!"
+    else:
+        #Connessione al database
+        db = MySQLdb.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASS, db=MYSQL_DB)
 
-    #Creazione di un puntatore per scorrere il database
-    cur = db.cursor()
-    cur.execute("SELECT * FROM "+MYSQL_REPLY_TABLE)
+        #Creazione di un puntatore per scorrere il database
+        cur = db.cursor()
+        cur.execute("SELECT * FROM "+MYSQL_REPLY_TABLE)
 
-    #Esplorazione del database alla ricerca della risposta
-    for row in cur.fetchall() :
-        if (text == row[1]):
-            reply=row[2]
-            break
-        else:
-            reply="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
+        #Esplorazione del database alla ricerca della risposta
+        for row in cur.fetchall() :
+            if (text == row[1]):
+                reply=row[2]
+                break
+            else:
+                reply="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
 
     return reply
 

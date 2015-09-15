@@ -12,10 +12,10 @@ _`Versioni di Python supportate`
 =============== =============
 Versione Python *Supportato?*
 =============== =============
-2.6             Not tested
-2.7             Not tested
-3.3             Not tested
-3.4             Yes
+2.6             Non testato
+2.7             Si
+3.3             Non testato
+3.4             Si
 =============== =============
 
 ====================
