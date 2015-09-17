@@ -19,6 +19,16 @@ Versione Python *Supportato?*
 =============== =============
 
 ====================
+_`Tipi di risposta`
+====================
+=============== =============
+Tipo di dato    *Descrizione*
+=============== =============
+text            Messaggio di risposta testuale
+img             Risposta con immagine (solo URL)
+aud             Risposta con messaggio vocale (solo percorsi locali)
+=============== =============
+====================
 _`Requisiti`
 ====================
 - python-telegram-bot (pip install python-telegram-bot)

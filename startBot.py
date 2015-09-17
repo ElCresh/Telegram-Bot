@@ -27,17 +27,17 @@ import sys
 
 ## DATABASE CONNECTION INFO ##
 MYSQL_HOST = "localhost"
-MYSQL_USER = "root"
-MYSQL_PASS = "root"
+MYSQL_USER = "telegram"
+MYSQL_PASS = "telegram"
 MYSQL_DB = "telegram_bot"
 MYSQL_REPLY_TABLE = "reply"
 ##############################
 
-###### BOT INFO VARIABLE ######
+#### BOT INFO VARIABLE ####
 TELEGRAM_BOT_NAME = ""
 TELEGRAM_BOT_ID = ""
 TELEGRAM_BOT_USERNAME = ""
-###############################
+###########################
 
 def getBotInfo(bot):
     global TELEGRAM_BOT_NAME
@@ -57,8 +57,12 @@ def readtoken(path):
     return token
 
 def reply(text, bot_name, bot, chat_id):
+    #Messaggio di risposta di default
+    reply_type="text"
+    reply_data="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
+
     if(text == "/start"):
-        reply="Ciao. Io sono "+TELEGRAM_BOT_NAME+". Piacere di conoscerti!"
+        reply_data="Ciao. Io sono "+TELEGRAM_BOT_NAME+". Piacere di conoscerti!"
     else:
         #Connessione al database
         db = MySQLdb.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASS, db=MYSQL_DB)
@@ -66,16 +70,19 @@ def reply(text, bot_name, bot, chat_id):
         #Creazione di un puntatore per scorrere il database
         cur = db.cursor()
         cur.execute("SELECT * FROM "+MYSQL_REPLY_TABLE)
+        #cur.execute("SELECT * FROM "+MYSQL_REPLY_TABLE+" WHERE 'message' = '"+text+"'")
 
         #Esplorazione del database alla ricerca della risposta
         for row in cur.fetchall() :
+            #print (row[1])
+            #print (row[2])
             if (text == row[1]):
-                reply=row[2]
+                reply_data=row[2]
+                reply_type=row[3]
                 break
-            else:
-                reply="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
 
-    return reply
+    #Restituisco il messaggio
+    return reply_data,reply_type
 
 def main():
     if len(sys.argv) == 1:
@@ -129,7 +136,16 @@ def main():
                 #Aggiono informazioni bot
                 getBotInfo(bot)
 
-                bot.sendMessage(chat_id=chat_id, text=reply(text, TELEGRAM_BOT_NAME, bot, chat_id))
+                reply_data,reply_type=reply(text, TELEGRAM_BOT_NAME, bot, chat_id)
+
+                if(reply_type == "text"):
+                    bot.sendMessage(chat_id=chat_id, text=reply_data)
+                elif(reply_type == "img"):
+                    bot.sendPhoto(chat_id=chat_id, photo=reply_data)
+                elif(reply_type == "aud"):
+                    with open(reply_data, 'rb') as audio:
+                        bot.sendVoice(chat_id=chat_id, voice=audio)
+
                 LAST_UPDATE_ID = update_id + 1
 
 if __name__ == '__main__':
