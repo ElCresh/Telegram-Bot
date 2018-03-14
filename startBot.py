@@ -1,152 +1,115 @@
 #!/usr/bin/env python
 #
-# Telegram Bot r0.1
+# Telepot Bot API v12.6
 #
 # Copyright (C) 2015
 #
 # Authors:
 # Andrea Crescentini <cresh.it@gmail.com>
 # Andrea Bartolucci <andbartol>
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see [http://www.gnu.org/licenses/].
 
-import MySQLdb
-import telegram
+import sqlite3
+import os
 import sys
+import telepot
+from settings import TOKEN
+from time import sleep
+
+
+TELEGRAM_BOT_USERNAME = ""
+TELEGRAM_BOT_ID = ""
+TELEGRAM_BOT_NAME = ""
 
 ## DATABASE CONNECTION INFO ##
 MYSQL_HOST = "localhost"
 MYSQL_USER = "telegram"
 MYSQL_PASS = "telegram"
-MYSQL_DB = "telegram_bot"
+MYSQL_DB = "telegram_bot.db"
 MYSQL_REPLY_TABLE = "reply"
 ##############################
 
-#### BOT INFO VARIABLE ####
-TELEGRAM_BOT_NAME = ""
-TELEGRAM_BOT_ID = ""
-TELEGRAM_BOT_USERNAME = ""
-###########################
+def on_chat_message(msg):
+    content_type, chat_type, chat_id = telepot.glance(msg)
+    state = False
 
-def getBotInfo(bot):
-    global TELEGRAM_BOT_NAME
-    global TELEGRAM_BOT_ID
-    global TELEGRAM_BOT_USERNAME
+    if content_type == 'text' and msg['text'] == '/start':
+        bot.sendMessage(chat_id, "Ciao. Io sono " + TELEGRAM_BOT_NAME + ". Piacere di conoscerti!")
+    
+    if content_type == 'text':
+        # Connessione al database
+        db = sqlite3.connect(MYSQL_DB)
 
+        # Creazione di un puntatore per scorrere il database
+        cur = db.cursor()
+        cur.execute("SELECT * FROM " + MYSQL_REPLY_TABLE)
+        #cur.execute("SELECT * FROM "+MYSQL_REPLY_TABLE+" WHERE 'message' = '"+text+"'")
+
+        # Esplorazione del database alla ricerca della risposta
+        for row in cur.fetchall():
+            print (row[1] + " " +row[3])
+            if str(msg['text']).lower() == row[1] and row[3] == "text":
+                bot.sendMessage(chat_id, row[2])
+                state = True
+                break
+
+            if str(msg['text']).lower() == row[1] and row[3] == "photo":
+                bot.sendMessage(chat_id, row[2])
+                state = True
+                break
+
+            if str(msg['text']).lower() == row[1] and row[3] == "voice":
+                # animazione di dell'immagine file
+                bot.sendChatAction(chat_id, 'upload_document')
+                # invio dell'immagine dalla cartella
+                bot.sendVoice(chat_id, (row[2], open(row[2], 'rb')))
+                state = True
+                break
+                                  
+        if state != True:
+            # Messaggio di risposta di default
+            bot.sendMessage(chat_id, "Mi dispiace ma non capisco cosa intendi per: \"" + msg['text'] + "\"")
+
+# Main
+print("Avvio bot in corso...")
+
+# PID file
+pid = str(os.getpid())
+pidfile = "/tmp/sendreceiver_bot.pid"
+
+# Check if PID exist
+if os.path.isfile(pidfile):
+    print("%s already exists, exiting!" % pidfile)
+    sys.exit()
+
+# Create PID file
+f = open(pidfile, 'w')
+f.write(pid)
+
+# Start working
+try:
+
+    # Creazione dell'istanza del bot
+    bot = telepot.Bot(token=TOKEN)
+    bot.message_loop(on_chat_message)    
+    
+    #### Ottengo informazioni del bot ####
     TELEGRAM_BOT_USERNAME = bot.getMe()['username']
     TELEGRAM_BOT_ID = str(bot.getMe()['id'])
     TELEGRAM_BOT_NAME = bot.getMe()['first_name']
+    ###########################
 
-def readtoken(path):
-    with open(path, "r") as config:
-        token = config.read()
-
-    if token[-1] == "\n":
-        token = token[:-1]
-    return token
-
-def reply(text, bot_name, bot, chat_id):
-    #Messaggio di risposta di default
-    reply_type="text"
-    reply_data="Mi dispiace ma non capisco cosa intendi per: \""+text+"\""
-
-    if(text == "/start"):
-        reply_data="Ciao. Io sono "+TELEGRAM_BOT_NAME+". Piacere di conoscerti!"
-    else:
-        #Connessione al database
-        db = MySQLdb.connect(host=MYSQL_HOST, user=MYSQL_USER, passwd=MYSQL_PASS, db=MYSQL_DB)
-
-        #Creazione di un puntatore per scorrere il database
-        cur = db.cursor()
-        cur.execute("SELECT * FROM "+MYSQL_REPLY_TABLE)
-        #cur.execute("SELECT * FROM "+MYSQL_REPLY_TABLE+" WHERE 'message' = '"+text+"'")
-
-        #Esplorazione del database alla ricerca della risposta
-        for row in cur.fetchall() :
-            #print (row[1])
-            #print (row[2])
-            if (text == row[1]):
-                reply_data=row[2]
-                reply_type=row[3]
-                break
-
-    #Restituisco il messaggio
-    return reply_data,reply_type
-
-def main():
-    if len(sys.argv) == 1:
-        path = "config"
-    else:
-        path = sys.argv[1]
-
-    #Ottengo il token per la creazione dell'istanza del bot
-    TELEGRAM_BOT_TOKEN = readtoken(path)
-
-    #Creazione dell'istanza del bot
-    bot = telegram.Bot(token=TELEGRAM_BOT_TOKEN)
-
-    #Ottengo informazioni del bot
-    getBotInfo(bot)
-
-    print ("Avvio bot in corso...")
-
-    #Stampa identita' del bot
+    # Stampa identita' del bot
     print ("")
     print ("= Identita' bot =")
-    print ("ID: " +TELEGRAM_BOT_ID)
-    print ("Nome: " +TELEGRAM_BOT_NAME)
-    print ("Username: " +TELEGRAM_BOT_USERNAME)
+    print ("ID: " + TELEGRAM_BOT_ID)
+    print ("Nome: " + TELEGRAM_BOT_NAME)
+    print ("Username: " + TELEGRAM_BOT_USERNAME)
     print ("")
-
-    #Stampa messaggi ricevuti mentre il bot non era in esecuzione
-    print ("Messaggi ricevuti: ")
-    updates = bot.getUpdates()
-    print ([u.message.text for u in updates])
-    print ("")
-
     print ("Bot avviato!")
     print ("")
 
-    try:
-        LAST_UPDATE_ID = bot.getUpdates()[-1].update_id
-    except IndexError:
-        LAST_UPDATE_ID = None
+    while(1):
+        sleep(10)
 
-    #Inizio routine del bot
-    while True:
-        for update in bot.getUpdates(offset=LAST_UPDATE_ID, timeout=10):
-            text = update.message.text
-            chat_id = update.message.chat.id
-            update_id = update.update_id
-
-            if (text):
-                print ("[MSG] "+text)
-
-                #Aggiono informazioni bot
-                getBotInfo(bot)
-
-                reply_data,reply_type=reply(text, TELEGRAM_BOT_NAME, bot, chat_id)
-
-                if(reply_type == "text"):
-                    bot.sendMessage(chat_id=chat_id, text=reply_data)
-                elif(reply_type == "img"):
-                    bot.sendPhoto(chat_id=chat_id, photo=reply_data)
-                elif(reply_type == "aud"):
-                    with open(reply_data, 'rb') as audio:
-                        bot.sendVoice(chat_id=chat_id, voice=audio)
-
-                LAST_UPDATE_ID = update_id + 1
-
-if __name__ == '__main__':
-    main()
+finally:
+    os.unlink(pidfile)

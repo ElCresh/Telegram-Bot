@@ -31,7 +31,7 @@ aud             Risposta con messaggio vocale (solo percorsi locali)
 ====================
 _`Requisiti`
 ====================
-- python-telegram-bot (pip install python-telegram-bot)
+- cat telegram_bot.sql | sqlite3 telegram_bot.db
 
 ====================
 _`Ottieni il codice`
