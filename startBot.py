@@ -2,11 +2,14 @@
 #
 # Telepot Bot API v12.6
 #
-# Copyright (C) 2015
+# Copyright (C) 2018
 #
 # Authors:
-# Andrea Crescentini <cresh.it@gmail.com>
+# Andrea Crescentini <ac@andreacrescentini.com> | https://github.com/ElCresh/
 # Andrea Bartolucci <andbartol>
+#
+# Contributors:
+# Fast0n | https://github.com/Fast0n
 
 import sqlite3
 import os
