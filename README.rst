@@ -5,9 +5,7 @@ _`Introduzione`
 
 Bot basato sulle `Telegram Bot API <https://core.telegram.org/bots/api>`_.
 
-Sono richieste le seguenti librerie:
-- sqlite3
-- telepot
+Sono richieste le seguenti librerie: sqlite3, telepot
 
 -------------------------
 _`Versioni di Python supportate`
