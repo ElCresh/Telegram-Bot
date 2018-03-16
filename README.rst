@@ -45,5 +45,5 @@ Il codice lo trovate a https://github.com/CreshZmine/Telegram-Bot/
 
 Per ottenere il codice::
 
-    $ git clone https://github.com/CreshZmine/Telegram-Bot/
+    $ git clone https://github.com/ElCresh/Telegram-Bot/
     $ cd Telegram-Bot
