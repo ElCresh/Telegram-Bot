@@ -41,7 +41,7 @@ _`Requisiti`
 _`Ottieni il codice`
 ====================
 
-Il codice lo trovate a https://github.com/CreshZmine/Telegram-Bot/
+Il codice lo trovate a https://github.com/ElCresh/Telegram-Bot/
 
 Per ottenere il codice::
 
